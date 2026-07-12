@@ -8,19 +8,18 @@ app = FastAPI(
     version="1.0"
 )
 
-# Allow frontend requests
+# Allow frontend access
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "https://provider-id10t.github.io"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-
-# -------------------------
-# Home
-# -------------------------
 
 @app.get("/")
 def home():
@@ -31,10 +30,6 @@ def home():
     }
 
 
-# -------------------------
-# Weather
-# -------------------------
-
 @app.get("/weather")
 def weather():
     return {
@@ -44,22 +39,16 @@ def weather():
     }
 
 
-# -------------------------
-# Emergency Numbers
-# -------------------------
-
 @app.get("/emergency")
 def emergency():
     return {
         "Police": "112",
         "Ambulance": "108",
-        "Fire": "101"
+        "Fire": "101",
+        "Women Helpline": "1091",
+        "Child Helpline": "1098"
     }
 
-
-# -------------------------
-# Scam Detector
-# -------------------------
 
 class ScamMessage(BaseModel):
     message: str
@@ -97,18 +86,16 @@ def detect_scam(data: ScamMessage):
     if score >= 5:
         return {
             "level": "HIGH",
-            "advice": "This message has several scam indicators. Do not click links or share personal information."
+            "advice": "⚠ High Risk Scam. Do NOT click links or share OTP, passwords or banking details."
         }
 
     elif score >= 2:
         return {
             "level": "MEDIUM",
-            "advice": "Some suspicious words were found. Verify the sender before responding."
+            "advice": "⚠ Suspicious message detected. Verify the sender before replying."
         }
 
-    else:
-        return {
-            "level": "LOW",
-            "advice": "No obvious scam indicators were detected. Stay cautious online."
-        }
-        
+    return {
+        "level": "LOW",
+        "advice": "✅ No obvious scam indicators found. Stay cautious online."
+    }

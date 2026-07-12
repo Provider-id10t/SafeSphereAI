@@ -1,12 +1,12 @@
 // ================================
 // SafeSphere AI - script.js
 // ================================
-
+const API = "https://safesphereai.onrender.com";
 // -------------------------------
 // Weather
 // -------------------------------
 
-fetch("http://127.0.0.1:8000/weather")
+fetch(`${API}/weather`)
     .then(response => response.json())
     .then(data => {
 
@@ -174,7 +174,9 @@ window.onclick = function (event) {
 // AI Scam Detector
 // -------------------------------
 
-function detectScam() {
+const API = "https://safesphereai.onrender.com";
+
+async function detectScam() {
 
     const input = document.getElementById("scamInput");
     const result = document.getElementById("scamResult");
@@ -184,84 +186,51 @@ function detectScam() {
         return;
     }
 
-    const message = input.value.toLowerCase();
+    result.innerHTML = "🔍 Analyzing message...";
 
-    const keywords = [
-        "win",
-        "winner",
-        "lottery",
-        "prize",
-        "urgent",
-        "click",
-        "verify",
-        "bank",
-        "otp",
-        "password",
-        "gift",
-        "free",
-        "account",
-        "payment",
-        "claim",
-        "congratulations",
-        "offer",
-        "reward",
-        "link"
-    ];
+    try {
 
-    let score = 0;
+        const response = await fetch(`${API}/detect-scam`, {
 
-    keywords.forEach(word => {
-        if (message.includes(word)) {
-            score++;
-        }
-    });
+            method: "POST",
 
-    if (score >= 5) {
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                message: input.value
+            })
+
+        });
+
+        const data = await response.json();
+
+        let color = "green";
+
+        if (data.level === "HIGH")
+            color = "red";
+        else if (data.level === "MEDIUM")
+            color = "orange";
 
         result.innerHTML = `
-            <h3>🔴 Scam Probability: HIGH</h3>
-            <p>This message looks suspicious.</p>
-            <ul>
-                <li>Do not click unknown links.</li>
-                <li>Never share your OTP or password.</li>
-            </ul>
+            <h3 style="color:${color};">
+                Scam Probability: ${data.level}
+            </h3>
+
+            <p>${data.advice}</p>
         `;
 
     }
-    else if (score >= 2) {
+
+    catch (error) {
 
         result.innerHTML = `
-            <h3>🟡 Scam Probability: MEDIUM</h3>
-            <p>Some suspicious keywords were detected.</p>
+            ❌ Unable to connect to the SafeSphere AI server.
         `;
 
-    }
-    else {
-
-        result.innerHTML = `
-            <h3>🟢 Scam Probability: LOW</h3>
-            <p>No major scam indicators were found.</p>
-        `;
+        console.error(error);
 
     }
-}
-// ================================
-// SOS Button
-// ================================
-
-function showSOS() {
-
-    const message =
-`🚨 EMERGENCY CONTACTS
-
-🚓 Police: 112
-🚑 Ambulance: 108
-🔥 Fire: 101
-👩 Women Helpline: 1091
-🧒 Child Helpline: 1098
-
-Stay calm and call the appropriate emergency service immediately.`;
-
-    alert(message);
 
 }
