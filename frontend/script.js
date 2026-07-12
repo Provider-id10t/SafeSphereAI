@@ -1,33 +1,98 @@
-// ================================
+// ======================================
 // SafeSphere AI - script.js
-// ================================
+// ======================================
+
+// ---------- Backend URL ----------
 const API = "https://safesphereai.onrender.com";
-// -------------------------------
+
+// ======================================
+// Load Data After Page Loads
+// ======================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    loadWeather();
+    loadEmergencyNumbers();
+});
+
+// ======================================
 // Weather
-// -------------------------------
+// ======================================
 
-fetch(`${API}/weather`)
-    .then(response => response.json())
-    .then(data => {
+async function loadWeather() {
 
-        document.getElementById("weather").innerHTML = `
+    const weather = document.getElementById("weather");
+
+    if (!weather) return;
+
+    weather.innerHTML = "🌤 Loading weather...";
+
+    try {
+
+        const response = await fetch(`${API}/weather`);
+
+        if (!response.ok) {
+            throw new Error("Unable to fetch weather");
+        }
+
+        const data = await response.json();
+
+        weather.innerHTML = `
             <b>📍 City:</b> ${data.city}<br>
             <b>🌡 Temperature:</b> ${data.temperature}<br>
             <b>☁ Condition:</b> ${data.condition}
         `;
 
-    })
-    .catch(() => {
+    } catch (error) {
 
-        document.getElementById("weather").innerHTML =
-            "Unable to load weather.";
+        console.error(error);
 
-    });
+        weather.innerHTML = `
+            ❌ Unable to load weather.
+        `;
 
+    }
 
-// -------------------------------
+}
+
+// ======================================
+// Emergency Numbers
+// ======================================
+
+async function loadEmergencyNumbers() {
+
+    const emergency = document.getElementById("emergency");
+
+    if (!emergency) return;
+
+    emergency.innerHTML = "☎ Loading emergency numbers...";
+
+    try {
+
+        const response = await fetch(`${API}/emergency`);
+
+        const data = await response.json();
+
+        emergency.innerHTML = `
+            🚓 <b>Police:</b> ${data.Police}<br><br>
+            🚑 <b>Ambulance:</b> ${data.Ambulance}<br><br>
+            🔥 <b>Fire:</b> ${data.Fire}<br><br>
+            👩 <b>Women Helpline:</b> 1091<br><br>
+            👶 <b>Child Helpline:</b> 1098
+        `;
+
+    } catch (error) {
+
+        console.error(error);
+
+        emergency.innerHTML = "Unable to load emergency numbers.";
+
+    }
+
+}
+
+// ======================================
 // First Aid Assistant
-// -------------------------------
+// ======================================
 
 function showFirstAid(type) {
 
@@ -38,124 +103,84 @@ function showFirstAid(type) {
     switch (type) {
 
         case "burn":
-
             title = "Burns";
             icon = "🔥";
-
             body = `
-            <h3>Immediate Steps</h3>
             <ul>
-                <li>✅ Cool the burn under running water for 20 minutes.</li>
+                <li>✅ Cool under running water for 20 minutes.</li>
                 <li>✅ Remove rings or tight clothing.</li>
-                <li>❌ Do NOT apply toothpaste, butter or ice.</li>
-                <li>❌ Do NOT burst blisters.</li>
-                <li>🚨 Visit a hospital if the burn is severe.</li>
-            </ul>
-            `;
-
+                <li>❌ Do NOT apply toothpaste or butter.</li>
+                <li>🚨 Seek medical help if severe.</li>
+            </ul>`;
             break;
 
         case "bleeding":
-
             title = "Bleeding";
             icon = "🩸";
-
             body = `
-            <h3>Immediate Steps</h3>
             <ul>
-                <li>✅ Apply firm pressure using a clean cloth.</li>
-                <li>✅ Raise the injured limb if possible.</li>
-                <li>❌ Don't remove the cloth if soaked.</li>
-                <li>🚨 Seek medical help for heavy bleeding.</li>
-            </ul>
-            `;
-
+                <li>✅ Apply firm pressure.</li>
+                <li>✅ Elevate the injured limb.</li>
+                <li>🚨 Call emergency services if bleeding doesn't stop.</li>
+            </ul>`;
             break;
 
         case "snake":
-
             title = "Snake Bite";
             icon = "🐍";
-
             body = `
-            <h3>Immediate Steps</h3>
             <ul>
                 <li>✅ Keep the victim calm.</li>
                 <li>✅ Keep the bitten limb still.</li>
-                <li>❌ Do NOT cut the wound.</li>
-                <li>❌ Do NOT suck the venom.</li>
-                <li>🚨 Go to the nearest hospital immediately.</li>
-            </ul>
-            `;
-
+                <li>❌ Don't cut or suck the wound.</li>
+                <li>🚨 Reach the nearest hospital immediately.</li>
+            </ul>`;
             break;
 
         case "fracture":
-
             title = "Fracture";
             icon = "🦴";
-
             body = `
-            <h3>Immediate Steps</h3>
             <ul>
                 <li>✅ Immobilize the injured limb.</li>
-                <li>✅ Apply a splint if trained.</li>
                 <li>❌ Don't try to straighten the bone.</li>
                 <li>🚨 Visit a hospital immediately.</li>
-            </ul>
-            `;
-
+            </ul>`;
             break;
 
         case "cpr":
-
             title = "CPR";
             icon = "❤️";
-
             body = `
-            <h3>Emergency CPR</h3>
             <ul>
-                <li>✅ Call emergency services immediately.</li>
+                <li>✅ Call emergency services.</li>
                 <li>✅ Push hard and fast in the center of the chest.</li>
-                <li>✅ Continue until medical help arrives.</li>
-            </ul>
-            `;
-
+                <li>✅ Continue until help arrives.</li>
+            </ul>`;
             break;
     }
 
-    // If you're using a modal
     const modal = document.getElementById("firstAidModal");
 
     if (modal) {
+
         document.getElementById("modalTitle").innerHTML = title;
         document.getElementById("modalIcon").innerHTML = icon;
         document.getElementById("modalBody").innerHTML = body;
 
         modal.style.display = "flex";
-    }
-    // Otherwise show inside the page
-    else {
-        document.getElementById("firstAidResult").innerHTML = `
-            <h3>${icon} ${title}</h3>
-            ${body}
-        `;
+
     }
 
 }
 
-
-// -------------------------------
+// ======================================
 // Close Modal
-// -------------------------------
+// ======================================
 
 function closeModal() {
 
-    const modal = document.getElementById("firstAidModal");
-
-    if (modal) {
-        modal.style.display = "none";
-    }
+    document.getElementById("firstAidModal").style.display = "none";
 
 }
 
@@ -163,18 +188,17 @@ window.onclick = function (event) {
 
     const modal = document.getElementById("firstAidModal");
 
-    if (modal && event.target === modal) {
+    if (event.target === modal) {
+
         modal.style.display = "none";
+
     }
 
 };
 
-
-// -------------------------------
+// ======================================
 // AI Scam Detector
-// -------------------------------
-
-const API = "https://safesphereai.onrender.com";
+// ======================================
 
 async function detectScam() {
 
@@ -182,8 +206,11 @@ async function detectScam() {
     const result = document.getElementById("scamResult");
 
     if (!input.value.trim()) {
+
         result.innerHTML = "⚠ Please enter a message.";
+
         return;
+
     }
 
     result.innerHTML = "🔍 Analyzing message...";
@@ -204,18 +231,32 @@ async function detectScam() {
 
         });
 
+        if (!response.ok) {
+
+            throw new Error("Server Error");
+
+        }
+
         const data = await response.json();
 
         let color = "green";
+        let emoji = "🟢";
 
-        if (data.level === "HIGH")
+        if (data.level === "HIGH") {
+
             color = "red";
-        else if (data.level === "MEDIUM")
+            emoji = "🔴";
+
+        } else if (data.level === "MEDIUM") {
+
             color = "orange";
+            emoji = "🟠";
+
+        }
 
         result.innerHTML = `
-            <h3 style="color:${color};">
-                Scam Probability: ${data.level}
+            <h3 style="color:${color}">
+                ${emoji} Scam Probability: ${data.level}
             </h3>
 
             <p>${data.advice}</p>
@@ -225,11 +266,11 @@ async function detectScam() {
 
     catch (error) {
 
-        result.innerHTML = `
-            ❌ Unable to connect to the SafeSphere AI server.
-        `;
-
         console.error(error);
+
+        result.innerHTML = `
+            ❌ Unable to connect to SafeSphere AI server.
+        `;
 
     }
 
