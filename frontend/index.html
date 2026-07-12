@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeSphere AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVIGATION ================= -->
+
+    <nav>
+
+        <div class="logo">
+            🛡 SafeSphere AI
+        </div>
+
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#weather-card">Weather</a></li>
+            <li><a href="#emergency-card">Emergency</a></li>
+            <li><a href="#firstaid-card">First Aid</a></li>
+            <li><a href="#scam-card">Scam Detector</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- ================= HERO ================= -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>🛡 SafeSphere AI</h1>
+
+            <p>Your Smart Emergency & Safety Assistant</p>
+
+            <p class="tagline">
+                Stay Safe • Stay Prepared • Stay Informed
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#weather-card" class="btn-primary">
+                    🌤 Weather
+                </a>
+
+                <a href="#scam-card" class="btn-secondary">
+                    🤖 Detect Scam
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+    <section class="stats">
+
+    <div class="stat-card">
+        <h2>24/7</h2>
+        <p>Emergency Support</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>5+</h2>
+        <p>Safety Tools</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>AI</h2>
+        <p>Scam Detection</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>100%</h2>
+        <p>Free to Use</p>
+    </div>
+
+</section>
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="grid">
+
+        <!-- WEATHER -->
+
+        <div class="card" id="weather-card">
+
+            <h2>🌤 Live Weather</h2>
+
+            <p id="weather">
+                Loading...
+            </p>
+
+        </div>
+
+        <!-- EMERGENCY -->
+
+        <div class="card" id="emergency-card">
+
+            <h2>🚑 Emergency Numbers</h2>
+
+            <ul>
+
+                <li>🚓 Police : 112</li>
+
+                <li>🚑 Ambulance : 108</li>
+
+                <li>🔥 Fire : 101</li>
+
+                <li>👩 Women Helpline : 1091</li>
+
+                <li>🧒 Child Helpline : 1098</li>
+
+            </ul>
+
+        </div>
+
+        <!-- FIRST AID -->
+
+        <div class="card" id="firstaid-card">
+
+            <h2>🩹 First Aid Assistant</h2>
+
+            <button onclick="showFirstAid('burn')">Burns</button>
+
+            <button onclick="showFirstAid('bleeding')">Bleeding</button>
+
+            <button onclick="showFirstAid('snake')">Snake Bite</button>
+
+            <button onclick="showFirstAid('fracture')">Fracture</button>
+
+            <button onclick="showFirstAid('cpr')">CPR</button>
+
+            <div id="firstAidResult"></div>
+
+        </div>
+
+        <!-- SCAM DETECTOR -->
+
+        <div class="card" id="scam-card">
+
+            <h2>🤖 AI Scam Detector</h2>
+
+            <textarea
+                id="scamInput"
+                rows="6"
+                placeholder="Paste a suspicious message here..."></textarea>
+
+            <br><br>
+
+            <button onclick="detectScam()">
+
+                Analyze Message
+
+            </button>
+
+            <br><br>
+
+            <div id="scamResult">
+
+                Analysis will appear here.
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ================= SOS ================= -->
+
+    <section class="hero" style="min-height:250px;">
+
+        <div>
+
+            <h2>🚨 Emergency SOS</h2>
+
+            <p>
+                In a real emergency, immediately call the appropriate emergency service.
+            </p>
+
+            <br>
+
+            <button
+    onclick="showSOS()"
+    style="font-size:22px;padding:18px 35px;background:#dc2626;color:white;border:none;border-radius:12px;cursor:pointer;">
+    🚨 SOS
+</button>
+
+        </div>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <h3>SafeSphere AI</h3>
+
+        <p>Class X Computer Science Project</p>
+
+        <p>Made by: Anshuman</p>
+
+    </footer>
+
+    <!-- ================= FIRST AID MODAL ================= -->
+
+    <div id="firstAidModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close" onclick="closeModal()">
+
+                &times;
+
+            </span>
+
+            <h2 id="modalTitle"></h2>
+
+            <div id="modalIcon" class="modal-icon"></div>
+
+            <div id="modalBody"></div>
+
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
